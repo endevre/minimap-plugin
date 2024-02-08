@@ -104,16 +104,14 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
     return this.editor.getNodes().map(node => {
       const view = this.area.nodeViews.get(node.id)
 
-      // eslint-disable-next-line
-      console.log('getnodesrect', node)
-
       if (!view) return null
 
       return {
         width: node.width,
         height: node.height,
         left: view.position.x,
-        top: view.position.y
+        top: view.position.y,
+        id: node.id
       }
     }).filter(Boolean) as Rect[]
   }
@@ -145,7 +143,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
           top: scale(node.top + origin.y),
           width: scale(node.width),
           height: scale(node.height),
-          borderColor: 'black'
+          id: node.id,
         })),
         viewport: {
           left: scale(viewport.left + origin.x),
