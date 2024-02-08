@@ -104,6 +104,8 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
     return this.editor.getNodes().map(node => {
       const view = this.area.nodeViews.get(node.id)
 
+      console.log('getnodesrect', node)
+
       if (!view) return null
 
       return {
