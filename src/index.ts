@@ -143,7 +143,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
           top: scale(node.top + origin.y),
           width: scale(node.width),
           height: scale(node.height),
-          id: node.id,
+          id: node.id
         })),
         viewport: {
           left: scale(viewport.left + origin.x),
