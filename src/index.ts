@@ -119,7 +119,6 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
   }
 
   getCurrNodes() {
-    const parent = this.parentScope() as any as Scope<MinimapExtra>
     const nodes = this.getNodesRect()
     const { transform } = this.area.area
     const { clientWidth: width, clientHeight: height } = this.area.container
@@ -131,7 +130,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
       height: height / transform.k
     }
     const rects = this.boundViewport ? [...nodes, viewport] : nodes
-    const { origin, scale, invert } = useBoundingCoordinateSystem(rects, minDistance, ratio)
+    const { origin, scale } = useBoundingCoordinateSystem(rects, minDistance, ratio)
 
     return nodes.map(node => ({
       left: scale(node.left + origin.x),
