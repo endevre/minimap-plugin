@@ -63,6 +63,8 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
     this.ratio = this.props?.ratio || 1
     this.minDistance = this.props?.minDistance || 2000
     this.boundViewport = Boolean(this.props?.boundViewport)
+
+    this.getNodesRect = this.getNodesRect.bind(this)
   }
 
   setParent(scope: Scope<MinimapExtra | Area2D<Schemes>, [Root<Schemes>]>): void {
@@ -114,6 +116,30 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
         id: node.id
       }
     }).filter(Boolean) as Rect[]
+  }
+
+  getCurrNodes() {
+    const parent = this.parentScope() as any as Scope<MinimapExtra>
+    const nodes = this.getNodesRect()
+    const { transform } = this.area.area
+    const { clientWidth: width, clientHeight: height } = this.area.container
+    const { minDistance, ratio } = this
+    const viewport: Rect = {
+      left: -transform.x / transform.k,
+      top: -transform.y / transform.k,
+      width: width / transform.k,
+      height: height / transform.k
+    }
+    const rects = this.boundViewport ? [...nodes, viewport] : nodes
+    const { origin, scale, invert } = useBoundingCoordinateSystem(rects, minDistance, ratio)
+
+    return nodes.map(node => ({
+      left: scale(node.left + origin.x),
+      top: scale(node.top + origin.y),
+      width: scale(node.width),
+      height: scale(node.height),
+      id: node.id
+    }))
   }
 
   private render() {
